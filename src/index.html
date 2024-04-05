@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./Scripts/Graph.js" ></script>
+    <script src="./Scripts/DistanceVector.js" ></script>
+    <script src="./Scripts/LinkState.js" ></script>
+    <script src="./Scripts/Main.js" ></script>
+    <script src="./lodash.js"></script>
+    <link rel="stylesheet" href="./index.css" type="text/css" />
+</head>
+<body>
+    <navbar class="Navbar_container">
+        <ul class="Navbar_comp">
+            <li><button onclick="handleMode(event,'CREATE')" class="mode">Create Nodes</button> </li>
+            <li><button onclick="handleMode(event,'SELECT')" class="mode">Connect Nodes</button></li>
+            <li><button onclick="runAlgorithm(event, 'dv')" class="mode">Run Distance-Vector</button></li>
+            <li><button onclick="runAlgorithm(event, 'ls')" class="mode">Run Link-State</button></li>
+            <li><button onclick="handleMode(event,'VIEWROUTES')" class="mode">View Routes</button></li>
+        </ul>
+    </navbar>
+    <div id="MainBoardContainer">
+        <div id="MainBoardTitle">Network</div>
+        <div id="MainBoard" onclick="addNode(event)"></div>
+    </div>
+    <div id="RoutingTablesContainer">
+        <div id="RoutingTablesTitle">Routing Tables</div>
+        <div id="RoutingTables"></div>
+    </div>
+    <div class="Algorithm_descriptions">
+        <h2>Link-State</h2>
+        <hr>
+        <div class="description">
+            <div>
+                <h3>Description</h3>
+                <p>
+                    The link-state algorithm computes the least-cost path between a source and
+                    destination using complete, global knowledge about the network. That is, the algorithm
+                    takes the connectivity between all nodes and all link costs as inputs. This then requires
+                    that the algorithm somehow obtain this information before actually performing the
+                    calculation. For the calculation itself, each node runs Dijkstra's algorithm on the
+                    global link-state information, and constructs a routing table that allows the node to
+                    know which hop to send information to, provided it needs to reach a certain destination.
+                </p>
+            </div>
+            <div>
+                <h3>Pros</h3>
+                <p>
+                    Link-state algorithms allow for more efficient use of network resources because they only 
+                    send updates when there is a change in the network topology. This is in contrast to 
+                    distance-vector algorithms, which require periodic updates even if there has been no change 
+                    in the network topology.
+                </p>
+                <p>
+                    Link-state algorithms converge more quickly than distance-vector algorithms because they are 
+                    based on a more accurate representation of the network topology. Each node has a complete view 
+                    of the network, which allows it to calculate the shortest path to every other node more efficiently.
+                </p>
+            </div>
+            <div>
+                <h3>Cons</h3>
+                <p>
+                    Link-state algorithms require more memory and processing power compared to distance-vector 
+                    algorithms because each node needs to maintain a complete view of the network topology. This can 
+                    be a challenge for large networks with many nodes.
+                </p>
+                <p>
+                    Link-state algorithms rely on a central controller or network management system to distribute 
+                    link-state packets and manage the link-state database. This can create a single point of failure 
+                    and make the network more vulnerable to attacks.
+                </p>
+            </div>
+        </div>
+        <h2>Distance-Vector</h2>
+        <hr>
+        <div class="description">
+            <div>
+                <h3>Description</h3>
+                <p>
+                    The Distance-Vector algorithm is an example of a decentralized algorithm, where the calculation 
+                    of the least-cost path is carried out in an iterative, distributed manner by the routers. No 
+                    node has complete information about the costs of all network links. Instead, each node begins 
+                    with only the knowledge of the costs of its own directly attached links. Then, through an 
+                    iterative process of calculation and exchange of information with its neighbouring nodes, a node 
+                    gradually calculates the least-cost path to a destination or set of destinations.
+                </p>
+            </div>
+            <div>
+                <h3>Pros</h3>
+                <p>
+                    The updates in distance-vector algorithms are based on local information, which makes them 
+                    computationally lightweight. Each node only needs to exchange information with its immediate 
+                    neighbors, which reduces the amount of network traffic and computation required.
+                </p>
+                <p>
+                    Distance-vector algorithms typically converge quickly to a stable routing solution. This is 
+                    because the updates are based on local information and are performed iteratively until no 
+                    further changes occur.
+                </p>
+            </div>
+            <div>
+                <h3>Cons</h3>
+                <p>
+                    Distance-vector algorithms can be inefficient in high-traffic networks, as each node periodically 
+                    sends its entire routing table to its neighbors. This can generate a significant amount of 
+                    network traffic, which can cause delays and congestion.
+                </p>
+                <p>
+                    The count-to-infinity problem can occur in a distance-vector routing algorithm when a node becomes 
+                    unreachable due to a link failure or some other reason. Other nodes may continue to advertise their 
+                    distance to the unreachable node, which can cause nodes to include the unreachable node in their 
+                    distance vectors with an infinite cost. If nodes do not exchange their updated distance vectors 
+                    quickly enough, they may continue to advertise outdated information to each other, which can cause 
+                    the network to become unstable. Certain workarounds involve additions to the algorithm, such as
+                    "split horizon" (where nodes do not send information about routes back to where they learned it
+                    from), or poison reverse, but neither are very effective and thus link-state algorithms are
+                    preferred instead.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
